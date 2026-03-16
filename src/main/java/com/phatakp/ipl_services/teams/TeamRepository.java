@@ -15,6 +15,10 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<TeamEntity, TeamEnum> {
 
     @Query(value = "select t from TeamEntity t " +
+            "left join fetch t.predictions " +
+            "left join fetch t.homeMatches " +
+            "left join fetch t.awayMatches " +
+            "left join fetch t.winnerMatches " +
             "order by t.points desc, t.nrr desc ")
     List<TeamEntity> getStandings();
 
