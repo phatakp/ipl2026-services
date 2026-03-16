@@ -1,0 +1,37 @@
+app:
+  url: ${APP_URL}
+  allowed-origins: ${FRONTEND_URL}
+  clerk-jwks-url: ${CLERK_JWKS_URL}
+  clerk-issuer: ${CLERK_ISSUER}
+  db-name: ${DB_NAME}
+  db-user: ${DB_USER}
+  db-pwd: ${DB_PWD}
+  db-host: ${DB_HOST}
+  db-url: ${DB_URL}
+  debug: ${APP_DEBUG}
+
+server:
+  servlet:
+    context-path: "/api/v1"
+
+spring:
+  application:
+    name: ipl-services
+  datasource:
+    url: ${app.db-url}
+    username: ${app.db-user}
+    password: ${app.db-pwd}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: ${app.debug}
+    open-in-view: ${app.debug}
+  flyway:
+    baseline-on-migrate: true
+
+springdoc:
+  api-docs:
+    enabled: ${app.debug}
+  swagger-ui:
+    enabled: ${app.debug}
