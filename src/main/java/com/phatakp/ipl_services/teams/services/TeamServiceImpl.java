@@ -31,11 +31,16 @@ public class TeamServiceImpl implements TeamService {
         if (appProperties.getDebug()) {
             log.info("getAllTeams()");
         }
-        return teamRepository.getStandings()
+
+        var teams=  teamRepository.getStandings()
                 .stream()
                 .map(TeamMapper::mapEntityToDTO)
                 .toList();
 
+        for(var team:teams){
+            team.setForm(teamRepository.getTeamForm(team.getShortName().name()));
+        }
+        return teams;
     }
 
 

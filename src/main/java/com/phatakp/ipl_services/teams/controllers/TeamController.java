@@ -37,15 +37,15 @@ public class TeamController {
         return ResponseEntity.ok(teamService.getTeams());
     }
 
-    @Operation(summary = "Get form of teams")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = TeamFormDTO.class))}),
-    })
-    @GetMapping("/form/{team}")
-    public ResponseEntity<List<TeamFormDTO>> getTeamForm(@Parameter(description = "Shortname of team to be retrieved",required = true)
-                                                             @PathVariable TeamEnum team) {
-        return ResponseEntity.ok(teamService.getTeamForms(team));
-    }
+//    @Operation(summary = "Get form of teams")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json",
+//                    schema = @Schema(implementation = TeamFormDTO.class))}),
+//    })
+//    @GetMapping("/form/{team}")
+//    public ResponseEntity<List<TeamFormDTO>> getTeamForm(@Parameter(description = "Shortname of team to be retrieved",required = true)
+//                                                             @PathVariable TeamEnum team) {
+//        return ResponseEntity.ok(teamService.getTeamForms(team));
+//    }
 
 }

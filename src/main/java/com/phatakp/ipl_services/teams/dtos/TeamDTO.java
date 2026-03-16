@@ -29,5 +29,5 @@ public class TeamDTO {
     private Integer forBalls;
     private Integer againstRuns;
     private Integer againstBalls;
-    private List<MatchShortDTO> form = new ArrayList<>();
+    private List<TeamFormDTO> form = new ArrayList<>();
 }
