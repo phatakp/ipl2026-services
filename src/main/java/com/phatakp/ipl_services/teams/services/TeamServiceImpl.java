@@ -2,9 +2,6 @@ package com.phatakp.ipl_services.teams.services;
 
 import com.phatakp.ipl_services.config.AppProperties;
 import com.phatakp.ipl_services.config.exceptions.APIException;
-import com.phatakp.ipl_services.matches.models.MatchEntity;
-import com.phatakp.ipl_services.matches.models.MatchStatus;
-import com.phatakp.ipl_services.matches.utils.MatchMapper;
 import com.phatakp.ipl_services.teams.TeamRepository;
 import com.phatakp.ipl_services.teams.dtos.TeamDTO;
 import com.phatakp.ipl_services.teams.dtos.TeamFormDTO;
@@ -17,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -37,21 +31,11 @@ public class TeamServiceImpl implements TeamService {
         if (appProperties.getDebug()) {
             log.info("getAllTeams()");
         }
-        var teams = teamRepository.getStandings();
-        var result = new ArrayList<TeamDTO>();
-        for (TeamEntity team : teams) {
-            var matches = Stream.concat(team.getHomeMatches().stream(),
-                            team.getAwayMatches().stream())
-                    .filter(m -> !m.getStatus().equals(MatchStatus.SCHEDULED))
-                    .sorted(Comparator.comparing(MatchEntity::getNumber).reversed())
-                    .limit(3)
-                    .map(MatchMapper::mapEntitytoShortDTO)
-                    .toList();
-            var teamDTO = TeamMapper.mapEntityToDTO(team);
-            teamDTO.setForm(matches);
-            result.add(teamDTO);
-        }
-        return result;
+        return teamRepository.getStandings()
+                .stream()
+                .map(TeamMapper::mapEntityToDTO)
+                .toList();
+
     }
 
 
