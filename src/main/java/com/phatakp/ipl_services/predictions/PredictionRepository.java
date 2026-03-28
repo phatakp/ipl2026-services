@@ -48,6 +48,13 @@ public interface PredictionRepository extends JpaRepository<PredictionEntity, St
     Optional<PredictionEntity> getUserPredictionForMatch(@Param("userId") String userId,
                                                          @Param("matchNum") Integer matchNum);
 
+    @Query(value = "select p from PredictionEntity p " +
+            "left join p.teamEntity " +
+            "left join p.match " +
+            "left join p.user " +
+            "where p.match is null")
+    List<PredictionEntity> getFinalPredictions();
+
 
 
 }

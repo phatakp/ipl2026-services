@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             }
             // Update team allowed only till completion of match 50
             if (!existingUser.getTeamEntity().getShortName().equals(team.getShortName()) && TimeUtil.isTeamChgNotAllowed()) {
-                throw APIException.invalidData("Team change is not allowed");
+                throw APIException.invalidData("Team change is not allowed now");
             }
 
             // Update user detail

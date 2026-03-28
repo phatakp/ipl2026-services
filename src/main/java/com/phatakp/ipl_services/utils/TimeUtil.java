@@ -17,7 +17,7 @@ public class TimeUtil {
 
     public static boolean isTeamChgNotAllowed(){
         var currentISTTime = TimeUtil.getCurrentISTTime();
-        var allowedTime = ZonedDateTime.parse("2026-05-01T00:00:00+05:30[Asia/Kolkata]");
+        var allowedTime = ZonedDateTime.parse("2026-05-08T00:00:00+05:30[Asia/Kolkata]");
         return currentISTTime.isAfter(allowedTime);
     }
 }

@@ -103,6 +103,10 @@ public class MatchEntity {
         return this.getType().equals(MatchType.LEAGUE);
     }
 
+    public boolean isFinal() {
+        return this.getType().equals(MatchType.FINAL);
+    }
+
     public boolean isScheduled() {
         return this.getStatus().equals(MatchStatus.SCHEDULED);
     }

@@ -84,6 +84,13 @@ public interface MatchRepository extends JpaRepository<MatchEntity, Integer> {
     List<MatchStatDTO> getStats(
             @Param("matchNum") Integer matchNum);
 
+    @Query(value = "select p.team, " +
+            "cast(coalesce(sum(p.amount),0) as smallint) " +
+            "from predictions p " +
+            "where p.match_number is null " +
+            "group by p.team  ", nativeQuery = true)
+    List<MatchStatDTO> getFinalStats();
+
     @Query(value = "select case " +
             "when p.team=:winner " +
             "then true else false end " +

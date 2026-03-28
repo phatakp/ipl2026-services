@@ -232,4 +232,51 @@ public class MatchUtils {
     }
 
 
+
+    public static List<PredictedWinnerDTO> settleFinal(
+            List<PredictionEntity> predictions,
+            TeamEnum winner,
+            List<MatchStatDTO> stats,
+            Boolean shouldSave) {
+
+
+        var totalWon = MatchUtils.getTotalWonAmount(stats, winner);
+        var totalLost = MatchUtils.getTotalLostAmount(stats, winner, 0);
+
+
+        // Both winners and losers (including defaulters)
+        if (totalWon > 0 && totalLost > 0) {
+            var result = new ArrayList<PredictedWinnerDTO>();
+
+            for (var prediction : predictions) {
+                if (prediction.getTeamEntity() != null
+                        && prediction.getTeamEntity().getShortName().equals(winner)) {
+                    var winAmount = MatchUtils.getWinAmount(prediction, totalWon, totalLost, Optional.empty());
+                    if (shouldSave) {
+                        MatchUtils.updatePredictionAsWon(prediction, winAmount);
+                    }
+                    result.add(PredictionMapper.mapToPredictedWinnerDTO(prediction, winAmount, winner));
+                } else {
+                    var lostAmount = MatchUtils.getLoseAmount(prediction, false);
+                    if (shouldSave) {
+                        MatchUtils.updatePredictionAsLost(prediction, lostAmount);
+                    }
+                    result.add(PredictionMapper.mapToPredictedWinnerDTO(prediction, lostAmount, winner));
+                }
+            }
+            return result;
+        }
+         else {
+            var result = new ArrayList<PredictedWinnerDTO>();
+            for (var prediction : predictions) {
+                if (shouldSave) {
+                    prediction.setStatus(PredictionStatus.NORESULT);
+                    prediction.setResultAmt(0F);
+                }
+                result.add(PredictionMapper.mapToPredictedWinnerDTO(prediction, 0F, winner));
+            }
+            return result;
+        }
+    }
+
 }

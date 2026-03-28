@@ -10,6 +10,7 @@ import com.phatakp.ipl_services.matches.models.MatchEntity;
 import com.phatakp.ipl_services.matches.utils.MatchMapper;
 import com.phatakp.ipl_services.matches.utils.MatchUtils;
 import com.phatakp.ipl_services.matches.utils.MatchValidations;
+import com.phatakp.ipl_services.predictions.PredictionRepository;
 import com.phatakp.ipl_services.predictions.models.PredictionEntity;
 import com.phatakp.ipl_services.predictions.utils.PredictionMapper;
 import com.phatakp.ipl_services.predictions.models.PredictionStatus;
@@ -33,6 +34,7 @@ public class MatchServiceImpl implements MatchService {
     private final UserService userService;
     private final AppProperties appProperties;
     private final MatchValidations matchValidations;
+    private final PredictionRepository predictionRepository;
 
     private boolean getIsDoubleWon(MatchEntity match, TeamEnum winner) {
         if (match.getIsDouble()) {
@@ -170,6 +172,13 @@ public class MatchServiceImpl implements MatchService {
             if (match.isLeague()) {
                 this.updateTeams(updatedMatch);
             }
+            if (match.isFinal()) {
+                var finalPredictions = predictionRepository.getFinalPredictions();
+                var finalStats = matchRepository.getFinalStats();
+                MatchUtils.settleFinal(finalPredictions,
+                        updatedMatch.getWinnerEntity().getShortName(),
+                        finalStats, true);
+            }
         } else if (updatedMatch.isAbandoned()) {
             MatchUtils.settleAbandoned(match,null,stats);
             if (match.isLeague()) {
@@ -278,6 +287,23 @@ public class MatchServiceImpl implements MatchService {
         if (match.isLeague()) {
             this.reverseTeams(match);
         }
+
+        if (match.isFinal()) {
+            var finalPredictions = predictionRepository.getFinalPredictions();
+            for (var prediction : finalPredictions) {
+                var reverseAmt = prediction.getResultAmt();
+                var user = prediction.getUser();
+                prediction.setResultAmt(0F);
+                prediction.setStatus(PredictionStatus.PLACED);
+                if (prediction.getStatus().equals(PredictionStatus.LOST)) {
+                    user.addBalance(reverseAmt*-1);
+                } else {
+                    user.subtractBalance(reverseAmt);
+                }
+                prediction.setUser(user);
+            }
+        }
+
         match.setPredictions(result);
         match.setIsUpdated(false);
         matchRepository.save(match);
