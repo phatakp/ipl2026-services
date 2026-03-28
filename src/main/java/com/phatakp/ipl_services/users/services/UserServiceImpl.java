@@ -11,6 +11,7 @@ import com.phatakp.ipl_services.users.dtos.UserRequestDTO;
 import com.phatakp.ipl_services.users.models.UserEntity;
 import com.phatakp.ipl_services.users.models.UserRole;
 import com.phatakp.ipl_services.users.utils.UserMapper;
+import com.phatakp.ipl_services.utils.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,11 @@ public class UserServiceImpl implements UserService {
             if (appProperties.getDebug()) {
                 log.info("updateUser()");
             }
+            // Update team allowed only till completion of match 50
+            if (!existingUser.getTeamEntity().getShortName().equals(team.getShortName()) && TimeUtil.isTeamChgNotAllowed()) {
+                throw APIException.invalidData("Team change is not allowed");
+            }
+
             // Update user detail
             var user = UserMapper.updateUserDTOtoUserEntity(request,existingUser, team);
             var predictionOptional = existingUser.getPredictions()

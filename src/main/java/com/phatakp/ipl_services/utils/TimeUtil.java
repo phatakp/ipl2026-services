@@ -1,5 +1,6 @@
 package com.phatakp.ipl_services.utils;
 
+import com.phatakp.ipl_services.matches.utils.MatchUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -12,5 +13,11 @@ public class TimeUtil {
         // Use "Asia/Kolkata" as "IST" is an abbreviation that can be ambiguous
         ZoneId istZoneId = ZoneId.of("Asia/Kolkata");
         return ZonedDateTime.now(istZoneId);
+    }
+
+    public static boolean isTeamChgNotAllowed(){
+        var currentISTTime = TimeUtil.getCurrentISTTime();
+        var allowedTime = ZonedDateTime.parse("2026-05-01T00:00:00+05:30[Asia/Kolkata]");
+        return currentISTTime.isAfter(allowedTime);
     }
 }

@@ -22,7 +22,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MatchUtils {
     public static final DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final PredictionMapper predictionMapper;
 
     public static short getMinStake(MatchType matchType) {
         if (matchType.equals(MatchType.LEAGUE)) {

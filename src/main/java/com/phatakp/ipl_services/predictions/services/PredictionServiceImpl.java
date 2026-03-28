@@ -117,7 +117,7 @@ public class PredictionServiceImpl implements PredictionService {
 
         // Cannot decrease amount
         if (prediction.getTeamEntity().equals(team) &&
-                prediction.getAmount() > request.getAmount()) {
+                prediction.getAmount() > request.getAmount() && match.hasEntryCutoffPassed()) {
             throw APIException.invalidData("Amount cannot be decreased");
         }
 

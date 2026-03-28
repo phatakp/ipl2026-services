@@ -33,7 +33,6 @@ public class MatchServiceImpl implements MatchService {
     private final UserService userService;
     private final AppProperties appProperties;
     private final MatchValidations matchValidations;
-    private final MatchUtils matchUtils;
 
     private boolean getIsDoubleWon(MatchEntity match, TeamEnum winner) {
         if (match.getIsDouble()) {
