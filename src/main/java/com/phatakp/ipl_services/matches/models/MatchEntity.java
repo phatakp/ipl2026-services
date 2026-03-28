@@ -70,23 +70,20 @@ public class MatchEntity {
     private String awayOvers;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "home_team", nullable = false)
-    @JsonIgnore
     @ToString.Exclude
     private TeamEntity homeTeamEntity;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "away_team", nullable = false)
-    @JsonIgnore
     @ToString.Exclude
     private TeamEntity awayTeamEntity;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "winner")
-    @JsonIgnore
     @ToString.Exclude
     private TeamEntity winnerEntity;
 
